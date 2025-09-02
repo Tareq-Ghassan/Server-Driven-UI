@@ -1,0 +1,38 @@
+{
+  "name": "stepper",
+  "version": "1.0.0",
+  "description": "just for testing",
+  "license": "MIT",
+  "author": "Tareq Ghassan Abu Saleh",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "jest:init": "npm init jest@latest",
+    "dev": "nodemon --exec ts-node src/server.ts",
+    "start": "node dist/src/server.js",
+    "build": "npm install && tsc -p .",
+    "clean": "rm -rf dist node_modules package-lock.json",
+    "test": "jest"
+  },
+  "dependencies": {
+    "@types/express": "^5.0.3",
+    "class-transformer": "^0.5.1",
+    "class-validator": "^0.14.2",
+    "express": "^5.1.0",
+    "mongoose": "^8.18.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.2"
+  },
+  "devDependencies": {
+    "@faker-js/faker": "^9.9.0",
+    "@types/jest": "^30.0.0",
+    "@types/node": "^24.2.1",
+    "@types/rosie": "^0.0.45",
+    "@types/supertest": "^6.0.3",
+    "jest": "^30.0.5",
+    "nodemon": "^3.1.10",
+    "rosie": "^2.1.1",
+    "supertest": "^7.1.4",
+    "ts-jest": "^29.4.1"
+  }
+}

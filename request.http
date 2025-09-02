@@ -1,0 +1,9 @@
+POST  http://localhost:9000/steppes
+Content-Type: application/json
+
+{
+    "numberOfSteps":"2",
+}
+
+GET  http://localhost:3000/steppes
+Content-Type: application/json
