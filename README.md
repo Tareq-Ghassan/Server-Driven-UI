@@ -5,6 +5,8 @@ An Express (Node.js) TypeScript service that exposes simple endpoints to set and
 ### Tech stack
 - **Runtime**: Node.js, Express 5
 - **Language**: TypeScript
+- **DB**: MongoDB, Mongoose
+- **Env management**: dotenv
 - **Validation**: class-validator, class-transformer
 - **Testing**: Jest, Supertest
 
@@ -16,12 +18,16 @@ src/
   services/
     stepper.service.ts       # Business logic
   repository/
-    stepper.repository.ts    # Repository (not implemented)
+    stepper.repository.ts    # Mongo-backed repository (uses Mongoose model)
     mockStepper.repository.ts # Mock repository (skeleton)
   model/
     stepper.model.ts         # Domain model
   dto/
     stepper.dto.ts           # Request DTO and validation rules
+  db/
+    mongoose.ts              # Mongoose connection and model registration
+    schema/
+      stepper.ts             # Mongoose schema and types
   utils/validation/
     requestValidator.ts      # Request body validator helper
   express.app.ts             # Express app wiring
@@ -29,7 +35,8 @@ src/
 ```
 
 ### Prerequisites
-- Node.js 18+ recommended
+- Node.js 18+
+- MongoDB instance (local or hosted)
 
 ### Installation
 ```bash
@@ -43,7 +50,13 @@ npm install
 - `npm test`: Run Jest test suite
 
 ### Running locally
-1) Development (auto-reload):
+1) Configure environment variables (create a `.env` in the project root):
+```env
+PORT=3000
+MONGO_URI=mongodb://localhost:27017/stepper
+```
+
+2) Development (auto-reload):
 ```bash
 npm run dev
 ```
@@ -54,7 +67,7 @@ npm run build
 npm start
 ```
 
-The server listens on `PORT` (default `3000`).
+The server listens on `PORT` (default `3000`). MongoDB connection uses `MONGO_URI` and is required at startup.
 
 ### API
 Base URL: `http://localhost:3000`
@@ -78,7 +91,7 @@ Base URL: `http://localhost:3000`
     - 500: Server error
 
 Notes:
-- The current `StepperRepository` methods (`get`, `set`) are not implemented and will throw. Wire a concrete implementation (e.g., database or in-memory) or swap in a working mock to enable the endpoints.
+- `StepperRepository` is implemented over Mongoose. It upserts/reads a singleton document with id `"stepper"`.
 
 ### Example requests
 Using the provided `request.http` (VS Code/JetBrains HTTP client):
@@ -118,8 +131,8 @@ npx jest --coverage
 Coverage reports (when enabled) will appear under `coverage/`.
 
 ### Implementation notes
-- There is a naming inconsistency between the DTO (`numberOfSteps`) and the model (`numberOfSteps`). The API currently validates and accepts `numberOfSteps`. Align these names if you change one or the other.
-- Replace `StepperRepository` with a working implementation to avoid runtime errors (e.g., implement in-memory storage for quick start).
+- DTO and model use `numberOfSteps` consistently.
+- Ensure `MONGO_URI` points to a reachable MongoDB; the server will fail fast if it is missing/invalid.
 
 ### License
 MIT © Tareq Ghassan Abu Saleh
