@@ -1,30 +1,28 @@
 
+import { Model } from "mongoose";
 import { IStepperRepository } from "../interface/stepperRepository.interface";
 import { Stepper } from "../model/stepper.model";
+import { StepperDoc } from "../db/schema/stepper";
 
 export class StepperRepository implements IStepperRepository {
+    constructor(private readonly Stepper: Model<StepperDoc>) {
 
-    // _prisma: PrismaClient
-    // constructor() {
-    //     this._prisma = new PrismaClient()
-    // }
-    get(): Promise<Stepper> {
-        throw new Error("Method not implemented.");
+    }
+    
+    async get(): Promise<Stepper> {
+        const doc = await this.Stepper.findById("stepper").lean(); // POJO for speed
+        if (!doc) {
+            throw new Error("Stepper not found");
+        }
+        return doc as Stepper;
     }
     async set(data: Stepper): Promise<Stepper> {
-        // const updateData: Prisma.ProductUpdateInput = {
-        //     name: data.name,
-        //     description: data.description,
-        //     price: data.price,
-        //     stock: data.stock,
-        // }
-        // const updated = await this._prisma.product.update({
-        //     where: { id: data.id! },
-        //     data: updateData,
-        // })
-        // return updated as unknown as Stepper
-        throw new Error("Method not implemented.");
-
+        const doc = await this.Stepper.findOneAndUpdate(
+            { _id: "stepper" },                     // use unique key to avoid multi-upsert
+            { $set: { numberOfSteps: data.numberOfSteps } },
+            { upsert: true, new: true, setDefaultsOnInsert: true }
+        ).lean();
+        return doc as StepperDoc;
     }
 
 }

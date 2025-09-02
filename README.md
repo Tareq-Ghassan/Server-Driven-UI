@@ -12,7 +12,7 @@ An Express (Node.js) TypeScript service that exposes simple endpoints to set and
 ```
 src/
   api/
-    stepper.routes.ts        # HTTP routes (/steppes)
+    stepper.routes.ts        # HTTP routes (/steps)
   services/
     stepper.service.ts       # Business logic
   repository/
@@ -59,19 +59,19 @@ The server listens on `PORT` (default `3000`).
 ### API
 Base URL: `http://localhost:3000`
 
-- POST `/steppes`
+- POST `/steps`
   - Description: Set the number of steps.
   - Request body (JSON):
     ```json
-    { "numberOfSteppes": 3 }
+    { "numberOfSteps": 3 }
     ```
-  - Validation: `numberOfSteppes` must be a number, required, and `>= 0`.
+  - Validation: `numberOfSteps` must be a number, required, and `>= 0`.
   - Responses:
     - 201: JSON of the stored object
     - 400: Validation error details
     - 500: Server error
 
-- GET `/steppes`
+- GET `/steps`
   - Description: Get the current number of steps.
   - Responses:
     - 200: JSON of the stored object
@@ -84,24 +84,24 @@ Notes:
 Using the provided `request.http` (VS Code/JetBrains HTTP client):
 ```
 ### Set steps
-POST http://localhost:3000/steppes
+POST http://localhost:3000/steps
 Content-Type: application/json
 
 {
-  "numberOfSteppes": 5
+  "numberOfSteps": 5
 }
 
 ### Get steps
-GET http://localhost:3000/steppes
+GET http://localhost:3000/steps
 ```
 
 Curl examples:
 ```bash
-curl -X POST http://localhost:3000/steppes \
+curl -X POST http://localhost:3000/steps \
   -H 'Content-Type: application/json' \
-  -d '{"numberOfSteppes": 5}'
+  -d '{"numberOfSteps": 5}'
 
-curl http://localhost:3000/steppes
+curl http://localhost:3000/steps
 ```
 
 ### Testing
@@ -118,7 +118,7 @@ npx jest --coverage
 Coverage reports (when enabled) will appear under `coverage/`.
 
 ### Implementation notes
-- There is a naming inconsistency between the DTO (`numberOfSteppes`) and the model (`numberOfSteps`). The API currently validates and accepts `numberOfSteppes`. Align these names if you change one or the other.
+- There is a naming inconsistency between the DTO (`numberOfSteps`) and the model (`numberOfSteps`). The API currently validates and accepts `numberOfSteps`. Align these names if you change one or the other.
 - Replace `StepperRepository` with a working implementation to avoid runtime errors (e.g., implement in-memory storage for quick start).
 
 ### License

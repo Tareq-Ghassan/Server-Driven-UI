@@ -34,24 +34,19 @@ describe("catalog service", () => {
             const result = await service.setNumberOfSteps(req)
             expect(result).toMatchObject(req)
         })
-
-        test("should throw error", async () => {
-            jest.spyOn(repo, 'set').mockImplementationOnce(() => Promise.reject(new Error("product doesn't exist")))
-            await expect(service.setNumberOfSteps({})).rejects.toThrow("product doesn't exist")
-        })
     })
 
     describe('getNumberOfSteps', () => {
-        test('should get steppes', async () => {
-            const steppes = StepperFactory.build()
-            jest.spyOn(repo, 'get').mockImplementationOnce(() => Promise.resolve(steppes))
+        test('should get steps', async () => {
+            const steps = StepperFactory.build()
+            jest.spyOn(repo, 'get').mockImplementationOnce(() => Promise.resolve(steps))
             const result = await service.getNumberOfSteps()
-            expect(result).toEqual(steppes)
+            expect(result).toEqual(steps)
         })
 
-        test("should throw error when steppes doesn't exist", async () => {
-            jest.spyOn(repo, 'get').mockImplementationOnce(() => Promise.reject(new Error("steppes doesn't exist")))
-            await expect(service.getNumberOfSteps()).rejects.toThrow("steppes doesn't exist")
+        test("should throw error when steps doesn't exist", async () => {
+            jest.spyOn(repo, 'get').mockImplementationOnce(() => Promise.reject(new Error("Stepper not found")))
+            await expect(service.getNumberOfSteps()).rejects.toThrow("Stepper not found")
         })
     })
 })

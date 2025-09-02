@@ -1,9 +1,9 @@
-POST  http://localhost:9000/steppes
-Content-Type: application/json
+# POST  http://localhost:3000/steps
+# Content-Type: application/json
 
-{
-    "numberOfSteps":"2",
-}
+# {
+#     "numberOfSteps": 3
+# }
 
-GET  http://localhost:3000/steppes
+GET  http://localhost:3000/steps
 Content-Type: application/json

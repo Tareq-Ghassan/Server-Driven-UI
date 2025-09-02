@@ -5,5 +5,5 @@ export class SetStepperDto {
     @IsNumber()
     @IsNotEmpty()
     @Min(0)
-    numberOfSteppes: number;
+    numberOfSteps: number;
 }
