@@ -1,6 +1,6 @@
-## Stepper
+## Server‑Driven UI (Forms)
 
-An Express (Node.js) TypeScript service that exposes simple endpoints to set and get a stepper value. The project is structured with DTOs, services, repositories, and validation using class-validator.
+An Express (Node.js) TypeScript backend for server‑driven UI forms. It stores versioned form definitions in MongoDB and exposes endpoints to fetch forms for mobile clients. Validation is handled via DTOs.
 
 ### Tech stack
 - **Runtime**: Node.js, Express 5
@@ -14,20 +14,19 @@ An Express (Node.js) TypeScript service that exposes simple endpoints to set and
 ```
 src/
   api/
-    stepper.routes.ts        # HTTP routes (/steps)
+    form.routes.ts           # HTTP routes (/forms/:key)
   services/
-    stepper.service.ts       # Business logic
+    form.service.ts          # Business logic (fetch latest form)
   repository/
-    stepper.repository.ts    # Mongo-backed repository (uses Mongoose model)
-    mockStepper.repository.ts # Mock repository (skeleton)
+    form.repository.ts       # Mongo-backed repository for forms
   model/
-    stepper.model.ts         # Domain model
+    form.model.ts            # Domain models (types for forms)
   dto/
-    stepper.dto.ts           # Request DTO and validation rules
+    from.dto.ts              # Request DTOs (GetFormDto)
   db/
     mongoose.ts              # Mongoose connection and model registration
     schema/
-      stepper.ts             # Mongoose schema and types
+      form.ts                # Mongoose schema and types for forms
   utils/validation/
     requestValidator.ts      # Request body validator helper
   express.app.ts             # Express app wiring
@@ -72,49 +71,24 @@ The server listens on `PORT` (default `3000`). MongoDB connection uses `MONGO_UR
 ### API
 Base URL: `http://localhost:3000`
 
-- POST `/steps`
-  - Description: Set the number of steps.
-  - Request body (JSON):
-    ```json
-    { "numberOfSteps": 3 }
-    ```
-  - Validation: `numberOfSteps` must be a number, required, and `>= 0`.
+- GET `/forms/:key`
+  - Description: Get the latest version of a form by `key`.
+  - Params: `key` (string) — validated via `GetFormDto`.
   - Responses:
-    - 201: JSON of the stored object
+    - 200: JSON form definition
     - 400: Validation error details
     - 500: Server error
-
-- GET `/steps`
-  - Description: Get the current number of steps.
-  - Responses:
-    - 200: JSON of the stored object
-    - 500: Server error
-
-Notes:
-- `StepperRepository` is implemented over Mongoose. It upserts/reads a singleton document with id `"stepper"`.
 
 ### Example requests
 Using the provided `request.http` (VS Code/JetBrains HTTP client):
 ```
-### Set steps
-POST http://localhost:3000/steps
-Content-Type: application/json
-
-{
-  "numberOfSteps": 5
-}
-
-### Get steps
-GET http://localhost:3000/steps
+### Get a form by key
+GET http://localhost:3000/forms/loan_application
 ```
 
-Curl examples:
+Curl example:
 ```bash
-curl -X POST http://localhost:3000/steps \
-  -H 'Content-Type: application/json' \
-  -d '{"numberOfSteps": 5}'
-
-curl http://localhost:3000/steps
+curl http://localhost:3000/forms/loan_application
 ```
 
 ### Testing
@@ -131,8 +105,8 @@ npx jest --coverage
 Coverage reports (when enabled) will appear under `coverage/`.
 
 ### Implementation notes
-- DTO and model use `numberOfSteps` consistently.
-- Ensure `MONGO_URI` points to a reachable MongoDB; the server will fail fast if it is missing/invalid.
+- `form.repository.ts` returns the latest form version (sorted by `version: -1`).
+- Ensure `MONGO_URI` points to a reachable MongoDB; the server fails fast if it is missing/invalid.
 
 ### License
 MIT © Tareq Ghassan Abu Saleh
