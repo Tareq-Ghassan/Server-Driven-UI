@@ -1,21 +1,21 @@
 import express from 'express';
-import stepperRouter from './api/stepper.routes'
+import formRouter from './api/form.routes'
 import mongoose, { Model } from 'mongoose'
-import { StepperSchema, StepperDoc } from './db/schema/stepper'
-import { StepperRepository } from './repository/stepper.repository'
-import { StepperService } from './services/stepper.service'
+import { FormSchema, FormDoc } from './db/schema/form'
+import { FormRepository } from './repository/form.repository'
+import { FormService } from './services/form.service'
 
 const app = express();
 app.use(express.json())
 
 // Wire service and inject into app locals
-const StepperModel: Model<StepperDoc> =
-    (mongoose.connection.models.Stepper as Model<StepperDoc> | undefined) ??
-    mongoose.model<StepperDoc>('Stepper', StepperSchema)
-const stepperService = new StepperService(new StepperRepository(StepperModel))
-app.set('stepperService', stepperService)
+const StepperModel: Model<FormDoc> =
+    (mongoose.connection.models.Stepper as Model<FormDoc> | undefined) ??
+    mongoose.model<FormDoc>('From', FormSchema)
+const stepperService = new FormService(new FormRepository(StepperModel))
+app.set('formService', stepperService)
 
-app.use("/", stepperRouter)
+app.use("/", formRouter)
 
 export default app;
 

@@ -1,13 +1,9 @@
-import { IStepperRepository } from "../interface/stepperRepository.interface";
-import { Stepper } from "../model/stepper.model";
+import { FormDoc } from "../db/schema/form";
+import { IFormRepository } from "../interface/formRepository.interface";
 
 // Mock implementation of ICatalogRepository
-export class MockStepperRepository implements IStepperRepository {
-    set(data: Stepper): Promise<Stepper> {
-        return Promise.resolve(data as unknown as Stepper);
+export class MockFormRepository implements IFormRepository {
+    get(key: string): Promise<Partial<FormDoc> | null> {
+        return Promise.resolve({} as unknown as FormDoc);
     }
-    get(): Promise<Stepper> {
-        return Promise.resolve({ numberOfSteps: 10 } as unknown as Stepper);
-    }
-
 }

@@ -1,7 +1,7 @@
 import app from './express.app';
 import { connectMongo, closeMongo } from './db/mongoose';
-import { StepperRepository } from './repository/stepper.repository';
-import { StepperService } from './services/stepper.service';
+import { FormService } from './services/form.service';
+import { FormRepository } from './repository/form.repository';
 import dotenv from 'dotenv'
 dotenv.config()
 
@@ -10,11 +10,11 @@ const PORT = Number(process.env.PORT || 3000);
 (async () => {
     const { models } = await connectMongo(process.env.MONGO_URI!);
 
-    const stepperRepo = new StepperRepository(models.Stepper);
-    const stepperService = new StepperService(stepperRepo);
+    const fromRepo = new FormRepository(models.Form);
+    const formService = new FormService(fromRepo);
 
     // Make it available to routes without changing express.app.ts
-    app.set('stepperService', stepperService);         // ← DI via app settings
+    app.set('formService', formService);         // ← DI via app settings
 
     const server = app.listen(PORT, () => {
         console.log(`🚀 Server running on :${PORT}`);
@@ -28,3 +28,4 @@ const PORT = Number(process.env.PORT || 3000);
     process.on('SIGINT', () => shutdown('SIGINT'));
     process.on('SIGTERM', () => shutdown('SIGTERM'));
 })();
+

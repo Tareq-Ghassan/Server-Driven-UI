@@ -1,9 +1,2 @@
-# POST  http://localhost:3000/steps
-# Content-Type: application/json
-
-# {
-#     "numberOfSteps": 3
-# }
-
-GET  http://localhost:3000/steps
+GET  http://localhost:3000/forms/loan_application
 Content-Type: application/json
